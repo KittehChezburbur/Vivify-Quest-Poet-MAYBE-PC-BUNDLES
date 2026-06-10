@@ -1,22 +1,19 @@
-name: Build Mod
-
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
+steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
 
-      - name: Setup QPM
-        uses: sc2ad/setup-qpm@v0.1.1
-        with:
-          qpm-version: 0.1.0
+      - name: Install QPM
+        run: |
+          curl -Lo qpm https://github.com/sc2ad/QuestPackageManager/releases/latest/download/qpm-linux-x64
+          chmod +x qpm
+          sudo mv qpm /usr/local/bin/
 
       - name: QPM Restore
         run: qpm restore
 
       - name: Build
-        run: cd build && cmake .. && make
+        run: |
+          mkdir build && cd build
+          cmake ..
+          make
