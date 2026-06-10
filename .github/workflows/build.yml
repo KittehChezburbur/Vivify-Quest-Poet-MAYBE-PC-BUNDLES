@@ -1,14 +1,22 @@
+name: Build Mod
+
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup NDK
-        uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r25b
+          submodules: true
+
+      - name: Setup QPM
+        uses: sc2ad/setup-qpm@v0.1.1
+        with:
+          qpm-version: 0.1.0
+
+      - name: QPM Restore
+        run: qpm restore
+
       - name: Build
-        run: |
-          mkdir build && cd build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
-          make
+        run: cd build && cmake .. && make
