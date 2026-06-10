@@ -1,0 +1,14 @@
+{
+  "name": "vivify",
+  "version": "0.4.11",
+  "dependencies": [
+    {
+      "id": "beatsaber-hook",
+      "version": "^6.4.2"
+    },
+    {
+      "id": "codegen",
+      "version": "^1.40.8"
+    }
+  ]
+}
