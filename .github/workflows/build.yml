@@ -11,14 +11,15 @@ jobs:
 
       - name: Install QPM
         run: |
-          # Use a direct link to the known working version
-          wget https://github.com/QuestPackageManager/QPM.CLI/releases/download/v0.1.20/qpm-linux-x64
-          chmod +x qpm-linux-x64
-          sudo mv qpm-linux-x64 /usr/local/bin/qpm
+          # Query GitHub API to get the latest QPM CLI download URL
+          LATEST_URL=$(curl -s https://api.github.com/repos/QuestPackageManager/QPM.CLI/releases/latest | grep "browser_download_url" | grep "qpm-linux-x64" | cut -d '"' -f 4)
+          echo "Downloading QPM from: $LATEST_URL"
+          wget -q $LATEST_URL -O qpm
+          chmod +x qpm
+          sudo mv qpm /usr/local/bin/qpm
           qpm --version
 
       - name: QPM Restore
-        # We pass the secret token so QPM can access dependencies
         env:
           QPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
