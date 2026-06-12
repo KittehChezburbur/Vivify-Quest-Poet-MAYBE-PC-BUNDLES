@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -12,7 +14,8 @@ jobs:
       - name: Setup QPM
         uses: Fernthedev/qpm-action@main
         with:
-          version: 0.1.20 # Latest stable version
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.1.20
 
       - name: QPM Restore
         run: qpm restore
