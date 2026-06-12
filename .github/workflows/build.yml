@@ -5,17 +5,22 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup QPM
-        uses: Fernthedev/qpm-action@main
+      - name: Install QPM
+        run: |
+          # Download the latest QPM CLI binary
+          curl -L https://github.com/QuestPackageManager/QPM.CLI/releases/latest/download/qpm-linux-x64 -o qpm
+          chmod +x qpm
+          sudo mv qpm /usr/local/bin/qpm
+          qpm --version
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
         with:
-          workflow_token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.1.20
+          ndk-version: r26b
 
       - name: QPM Restore
         run: qpm restore
